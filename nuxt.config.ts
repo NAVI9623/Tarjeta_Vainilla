@@ -2,4 +2,9 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: false },
+
+  modules: ["@nuxtjs/color-mode"],
+  colorMode: {
+    classSuffix: "", // Para que agregue clase .dark y no .dark-mode
+  },
 });

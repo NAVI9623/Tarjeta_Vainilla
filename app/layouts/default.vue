@@ -7,7 +7,9 @@ import Background from "~/components/Background.vue";
     <AppHeader />
     <ColorModeButton />
     <AppFooter />
-    <Background />
+    <ClientOnly>
+      <Background />
+    </ClientOnly>
     <slot></slot>
   </div>
 </template>
