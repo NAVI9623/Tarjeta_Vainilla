@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppFooter from "./components/AppFooter.vue";
+
 useHead({
   title: "NaviInfo",
   meta: [
@@ -15,5 +17,8 @@ useHead({
 <template>
   <NuxtLayout>
     <NuxtPage />
+    <SvgFrame />
   </NuxtLayout>
+  <AppMain />
+  <AppFooter />
 </template>

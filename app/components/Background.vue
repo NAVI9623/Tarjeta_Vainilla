@@ -1,8 +1,15 @@
 <template>
   <div class="jp-matrix">
-    <span v-for="(char, i) in characters" :key="i">
-      {{ char }}
-    </span>
+    <span
+      v-for="(char, i) in characters"
+      :key="i"
+      :style="{
+        animationDelay: `${Math.random() * 5}s`,
+        animationDuration: `${2 + Math.random() * 4}s`,
+        opacity: Math.random(),
+      }"
+      >{{ char }}</span
+    >
   </div>
 </template>
 
@@ -54,34 +61,8 @@ const kana = [
   "ワ",
   "ヲ",
   "ン",
-  "ガ",
-  "ギ",
-  "グ",
-  "ゲ",
-  "ゴ",
-  "ザ",
-  "ジ",
-  "ズ",
-  "ゼ",
-  "ゾ",
-  "ダ",
-  "ヂ",
-  "ヅ",
-  "デ",
-  "ド",
-  "バ",
-  "ビ",
-  "ブ",
-  "ベ",
-  "ボ",
-  "パ",
-  "ピ",
-  "プ",
-  "ペ",
-  "ポ",
 ];
 
-// generar muchos caracteres para llenar la pantalla
 const characters = Array.from(
   { length: 800 },
   () => kana[Math.floor(Math.random() * kana.length)],
