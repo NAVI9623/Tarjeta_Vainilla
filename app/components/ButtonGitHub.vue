@@ -2,11 +2,7 @@
 
 <template>
   <div>
-    <NuxtLink
-      to="https://github.com/AaronMasterProg"
-      target="_blank"
-      class="Btn"
-    >
+    <NuxtLink to="https://github.com/NAVI9623" target="_blank" class="Btn">
       <span class="svgContainer">
         <svg fill="white" viewBox="0 0 496 512" height="1.6em">
           <path
