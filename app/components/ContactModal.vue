@@ -3,9 +3,8 @@ const props = defineProps<{ open: boolean }>();
 const emit = defineEmits<{ close: [] }>();
 
 const SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzOH6yghsXziV3dAP9cSCPcD-A5FooD-RKt2UEwf5JnnshFb4OUGxAyu6MwuLHPvGV4/exec";
-//AKfycbz_bfMBw2aQ5NuHOeRniTa6kaoE_MsY-xEMbEAiiq2hxKadympkxYN6RL4Ozue9VOAv
-//https://script.google.com/macros/s/AKfycbz_bfMBw2aQ5NuHOeRniTa6kaoE_MsY-xEMbEAiiq2hxKadympkxYN6RL4Ozue9VOAv/exec
+  "https://script.google.com/macros/s/AKfycbyYLuTRTlTsNRjnqDvqngPuuCHPvI6Oov6kMpNcx_ETBXDQkDSZsu_NOi-sdGdRerAS/exec";
+
 const form = reactive({
   nombre: "",
   email: "",
@@ -51,21 +50,21 @@ const onSubmit = async () => {
   error.value = "";
 
   try {
-    // FormData evita el problema de CORS con Apps Script
-    const formData = new FormData();
-    formData.append("nombre", form.nombre);
-    formData.append("email", form.email);
-    formData.append("telefono", form.telefono);
-    formData.append("servicio", form.servicio);
-    formData.append("mensaje", form.mensaje);
+    // URLSearchParams envía como x-www-form-urlencoded
+    // que SÍ es compatible con e.parameter de Apps Script
+    const params = new URLSearchParams();
+    params.append("nombre", form.nombre);
+    params.append("email", form.email);
+    params.append("telefono", form.telefono);
+    params.append("servicio", form.servicio);
+    params.append("mensaje", form.mensaje);
 
     await fetch(SCRIPT_URL, {
       method: "POST",
-      mode: "no-cors", // ← clave para evitar el CORS
-      body: formData,
+      mode: "no-cors",
+      body: params,
     });
 
-    // no-cors no devuelve respuesta legible, pero si no lanza error = ok
     sent.value = true;
   } catch (e) {
     error.value = "Hubo un error al enviar. Intenta de nuevo.";

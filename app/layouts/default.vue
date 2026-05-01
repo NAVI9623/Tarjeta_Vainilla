@@ -1,5 +1,23 @@
 <script setup lang="ts">
 import Background from "~/components/Background.vue";
+
+const colorMode = useColorMode();
+const cardRef = ref<HTMLElement | null>(null);
+
+const onMouseMove = (e: MouseEvent) => {
+  const card = cardRef.value;
+  if (!card) return;
+  const rect = card.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width - 0.5;
+  const y = (e.clientY - rect.top) / rect.height - 0.5;
+  card.style.transform = `perspective(1000px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+};
+
+const onMouseLeave = () => {
+  const card = cardRef.value;
+  if (!card) return;
+  card.style.transform = "perspective(1000px) rotateY(0deg) rotateX(0deg)";
+};
 </script>
 
 <template>
@@ -8,7 +26,13 @@ import Background from "~/components/Background.vue";
   </ClientOnly>
 
   <main class="page-wrapper">
-    <div class="glass-card">
+    <div
+      ref="cardRef"
+      class="glass-card"
+      :class="colorMode.value"
+      @mousemove="onMouseMove"
+      @mouseleave="onMouseLeave"
+    >
       <div class="card-topbar">
         <span class="status-dot"></span>
         <span class="status-text">disponible</span>
@@ -94,5 +118,36 @@ import Background from "~/components/Background.vue";
   50% {
     opacity: 0.35;
   }
+}
+
+/* MODO OSCURO — espacio profundo */
+.glass-card.dark {
+  background: rgba(3, 6, 25, 0.7);
+  border-color: rgba(0, 255, 238, 0.15);
+  box-shadow:
+    0 0 0 1px rgba(0, 255, 238, 0.03) inset,
+    0 4px 80px rgba(0, 0, 0, 0.7),
+    0 0 80px rgba(0, 100, 255, 0.08);
+  color: #e8e8ff;
+}
+
+/* MODO CLARO — amanecer espacial */
+.glass-card.light {
+  background: rgba(10, 22, 50, 0.6);
+  border-color: rgba(255, 180, 50, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(255, 180, 50, 0.05) inset,
+    0 4px 80px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba(255, 120, 0, 0.1);
+  color: #e8f4ff;
+}
+
+/* Topbar modo claro */
+.glass-card.light .status-dot {
+  background: #ffd700;
+  box-shadow: 0 0 8px #ffd700;
+}
+.glass-card.light .status-text {
+  color: #ffd700;
 }
 </style>

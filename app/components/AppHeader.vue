@@ -1,15 +1,37 @@
+<script setup lang="ts">
+import { defineAsyncComponent } from "vue";
+
+// ✅ CODE SPLITTING — Three.js solo se descarga cuando este componente se monta
+const ModelViewer = defineAsyncComponent({
+  loader: () => import("~/components/ModelViewer.vue"),
+  loadingComponent: {
+    template: `
+      <div class="model-loading">
+        <div class="model-spinner"></div>
+      </div>
+    `,
+  },
+  delay: 200,
+  timeout: 10000,
+});
+</script>
+
 <template>
   <div class="profile-header">
+    <!-- Visor 3D — reemplaza el avatar -->
     <div class="avatar-frame">
-      <SvgFrame class="svg-deco" />
-      <div class="avatar">
-        <img src="/profile/profile.jpg" alt="Ivan" />
-      </div>
+      <ClientOnly>
+        <ModelViewer stl-path="/models/model.stl" class="model-wrap" />
+        <template #fallback>
+          <div class="model-loading">
+            <div class="model-spinner"></div>
+          </div>
+        </template>
+      </ClientOnly>
     </div>
+
     <h1 class="profile-name">Ivan Ignacio Ramirez Montañez</h1>
-    <p class="profile-role">
-      Full Stack Developer. Diseñador web. Backend Engineer
-    </p>
+    <p class="profile-role">Datos · Ciberseguridad · Machine Learning</p>
   </div>
 </template>
 
@@ -18,47 +40,43 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2.5rem 2rem 1.5rem;
+  padding: 1.5rem 2rem 1rem;
   text-align: center;
   gap: 0.8rem;
 }
 
 .avatar-frame {
+  width: 220px;
+  height: 220px;
   position: relative;
-  width: 140px;
-  height: 140px;
+}
+
+.model-wrap {
+  width: 100%;
+  height: 100%;
+}
+
+.model-loading {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.svg-deco {
-  position: absolute;
-  inset: -30px;
-  width: calc(100% + 60px);
-  height: calc(100% + 60px);
-  opacity: 0.85;
-  pointer-events: none;
-}
-
-.avatar {
-  width: 90px;
-  height: 90px;
+.model-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(0, 255, 238, 0.15);
+  border-top-color: #00ffee;
   border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid #00ffee;
-  box-shadow:
-    0 0 20px rgba(0, 255, 238, 0.4),
-    0 0 40px rgba(0, 255, 238, 0.1);
-  position: relative;
-  z-index: 1;
-  background: rgba(0, 255, 238, 0.05);
+  animation: spin 0.8s linear infinite;
 }
 
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .profile-name {
@@ -66,8 +84,6 @@
   font-size: 1.25rem;
   font-weight: 700;
   color: #fff;
-  letter-spacing: 0.01em;
-  line-height: 1.3;
   margin: 0;
 }
 
