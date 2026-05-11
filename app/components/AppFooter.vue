@@ -1,12 +1,16 @@
 <script setup lang="ts">
-const modalOpen = ref(false);
+const contactOpen = ref(false);
+const chessOpen = ref(false);
 </script>
 
 <template>
   <div class="card-footer">
     <ButtonGitHub />
-    <ButtonContact @open="modalOpen = true" />
-    <ContactModal :open="modalOpen" @close="modalOpen = false" />
+    <ButtonContact @open="contactOpen = true" />
+    <ButtonChess @open="chessOpen = true" />
+
+    <ContactModal :open="contactOpen" @close="contactOpen = false" />
+    <ChessModal :open="chessOpen" @close="chessOpen = false" />
   </div>
 </template>
 
